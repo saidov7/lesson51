@@ -6,29 +6,28 @@ function App() {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
-    fetch('https://dummyjson.com/products')
+    fetch('https://dummyjson.com/products?limit=12')
       .then(res => res.json())
       .then(data => setProducts(data.products));
   }, []);
 
   const addToCart = (product) => {
-    setCart([...cart, product]);
+    setCart(prev => [...prev, product]);
   };
 
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
   return (
     <div className="container">
-      <header className="header">
-        <h1> Lux Store</h1>
-        <div className="cart-info">
-           {cart.length} items |  ${total.toFixed(2)}
-        </div>
-      </header>
+      <h1 className="title">🛍️ Grid Store</h1>
+      <div className="cart-info">
+        <p><strong>Items:</strong> {cart.length}</p>
+        <p><strong>Total:</strong> ${total.toFixed(2)}</p>
+      </div>
 
-      <div className="grid">
+      <div className="products-wrapper">
         {products.map(product => (
-          <div className="card" key={product.id}>
+          <div key={product.id} className="card">
             <img src={product.thumbnail} alt={product.title} />
             <h2>{product.title}</h2>
             <p className="price">${product.price}</p>
@@ -38,16 +37,12 @@ function App() {
       </div>
 
       <div className="cart-box">
-        <h2> Cart Details</h2>
-        {cart.length === 0 ? (
-          <p>Your cart is empty.</p>
-        ) : (
-          <ul>
-            {cart.map((item, i) => (
-              <li key={i}>{item.title} — ${item.price}</li>
-            ))}
-          </ul>
-        )}
+        <h2>🛒 Cart</h2>
+        <ul>
+          {cart.map((item, idx) => (
+            <li key={idx}>{item.title} - ${item.price}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
